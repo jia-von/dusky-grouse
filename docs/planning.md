@@ -66,3 +66,13 @@ The table below are created for my own learning purposes and the full descriptio
 | `effectiveEndDate` | `2022-04-01T00:00:00Z` | Not all Azure services provides ends date, but the API does have `effectiveEndDate` reponse where available. |
 | `meterId` | `000009d0-057f-5f2b-b7e9-9e26add324a8` | Unique identifier of the resource. Further information about [Meter ID](https://azure.microsoft.com/en-us/updates/update-reports-for-improved-meter-names/). |
 | `meterName` | `D14/DS14 Spot` | Name of the meter. |
+| `productId` | `DZH318Z0BPVW` | UniqueID of the product. |
+| `skuId` | `DZH318Z0BPVW/00QZ` | UniqueID for the SKU |
+| `productName` | `Virtual Machines D Series Windows` | Product name. |
+| `skuName` | `D14 Spot` | SKU name |
+| `serviceName` | `Virtual Machines` | Name of the service |
+| `serviceId` | `DZH313Z7MMC8` | UniqueID of the service |
+| `serviceFamily` | `Compute` | Service family of the SKU |
+| `unitOfMeasure` | `1 Hour` |  	How usage is measured for the service. |
+| `type` | `DevTestConsumption` |  Meter consumption type. Other types are _Reservation_, _Consumption_. |
+| `isPrimaryMeterRegion` | `true` | Indicates whether the meter region is set as a primary meter or not. Primary meters are used for charges and billing. |
