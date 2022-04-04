@@ -74,5 +74,5 @@ The table below are created for my own learning purposes and the full descriptio
 | `serviceId` | `DZH313Z7MMC8` | UniqueID of the service |
 | `serviceFamily` | `Compute` | Service family of the SKU |
 | `unitOfMeasure` | `1 Hour` |  	How usage is measured for the service. |
-| `type` | `DevTestConsumption` |  Meter consumption type. Other types are _Reservation_, _Consumption_. |
+| `type` | `DevTestConsumption` |  [DevTestConsumption](https://azure.microsoft.com/en-ca/pricing/dev-test/) meter consumption type. Other types are _[Reservation](https://azure.microsoft.com/en-ca/reservations/)_, _[Consumption](https://azure.microsoft.com/en-gb/pricing/details/functions/)_. |
 | `isPrimaryMeterRegion` | `true` | Indicates whether the meter region is set as a primary meter or not. Primary meters are used for charges and billing. |
