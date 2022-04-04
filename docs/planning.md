@@ -52,3 +52,17 @@ The JSON responded with an array of object nested within `Items`. Below shows an
  }
 ```
 The table below are created for my own learning purposes and the full description can be found in [Azure REST API property details](https://docs.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices#api-property-details). The descriptions of each fields above are described below:
+
+| Fields | Example Values | Definition |
+| --- | --- | --- |
+| `currencyCode` | `USD` | The currency in which rates are defined and returns prices in USD unless specified. |
+| `tierMinimumUnits` | `0` | Minimum units of consumption to [avail](https://www.oxfordlearnersdictionaries.com/definition/english/avail_2) the price. |
+| `reservationTerm` | `1 Year` | Reservation term – one year or three years |
+| `retailPrice` | `0.236555` | Prices without discount |
+| `unitPrice` | `0.236555` |  |
+| `armRegionName` | `southindia` | [ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/overview) region where the service is available. This version only supports prices on Commercial Cloud. |
+| `location` | `IN South` | Azure data center where the resource is deployed. |
+| `effectiveStartDate` | `2022-04-01T00:00:00Z` | Optional field. Shows the date when the retail prices are effective |
+| `effectiveEndDate` | `2022-04-01T00:00:00Z` | Not all Azure services provides ends date, but the API does have `effectiveEndDate` reponse where available. |
+| `meterId` | `000009d0-057f-5f2b-b7e9-9e26add324a8` | Unique identifier of the resource. Further information about [Meter ID](https://azure.microsoft.com/en-us/updates/update-reports-for-improved-meter-names/). |
+| `meterName` | `D14/DS14 Spot` | Name of the meter. |
