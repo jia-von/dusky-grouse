@@ -64,7 +64,7 @@ The table below are created for my own learning purposes and the full descriptio
 | `location` | `IN South` | Azure data center where the resource is deployed. |
 | `effectiveStartDate` | `2022-04-01T00:00:00Z` | Optional field. Shows the date when the retail prices are effective |
 | `effectiveEndDate` | `2022-04-01T00:00:00Z` | Not all Azure services provides ends date, but the API does have `effectiveEndDate` reponse where available. |
-| `meterId` | `000009d0-057f-5f2b-b7e9-9e26add324a8` | Unique identifier of the resource. Further information about [Meter ID](https://azure.microsoft.com/en-us/updates/update-reports-for-improved-meter-names/). |
+| `meterId` | `000009d0-057f-5f2b-b7e9-9e26add324a8` | Unique identifier of the resource. Further information about [Meter ID](https://azure.microsoft.com/en-us/updates/update-reports-for-improved-meter-names/). _For Compute Hour usage, there is a meter for each VM Size + OS (Windows, Non-Windows) + Region._, _For Premium software usage, there is a meter for each software type. Most premium software images have different meters for each core size._ |
 | `meterName` | `D14/DS14 Spot` | Name of the meter. |
 | `productId` | `DZH318Z0BPVW` | UniqueID of the product. |
 | `skuId` | `DZH318Z0BPVW/00QZ` | UniqueID for the SKU |
