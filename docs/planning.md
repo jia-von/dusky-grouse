@@ -78,3 +78,25 @@ The table below are created for my own learning purposes and the full descriptio
 | `isPrimaryMeterRegion` | `true` | Indicates whether the [meter region](https://docs.microsoft.com/en-us/azure/virtual-machines/vm-usage) is set as a primary meter or not. Primary meters are used for charges and billing. |
 
 ### Nomenclature Breakdown
+The Azure virtual machine (VM) nomenclature will be used to _translate_ VM names into descriptions such as storage, vCPU, and memory.
+
+#### Example
+**[Family]** + _[Sub-family]*_ + **[# of vCPUs]** + _[Constrained vCPUs]*_ + **[Additive Features]** + _[Accelerator Type]*_ + **[Version]**
+
+| Value | Description |
+| --- | --- |
+| Family | Indicates the VM Family Series |
+| \*Sub-family | Used for specialized VM differentiations only |
+| # of vCPUs | Denotes the number of vCPUs of the VM |
+| \*Constrained vCPUs | Used for certain VM sizes only. Denotes the number of vCPUs for the [constrained vCPU capable size](https://docs.microsoft.com/en-us/azure/virtual-machines/constrained-vcpu) |
+| Additive Features | One or more lower case letters denote additive features, such as:
+|  | a = AMD-based processor |
+|  | d = diskfull (local temp disk is present); this is for newer Azure VMs, see Ddv4 and Ddsv4-series |
+|  | i = isolated size |
+|  | l = low memory; a lower amount of memory than the memory intensive size |
+|  | m = memory intensive; the most amount of memory in a particular size |
+|  | t = tiny memory; the smallest amount of memory in a particular size |
+|  | s = Premium Storage capable, including possible use of Ultra SSD (Note: some newer sizes without the attribute of s can still support Premium Storage e.g. M128, M64, etc.) |
+| \*Accelerator Type | Denotes the type of hardware accelerator in the specialized/GPU SKUs. Only the new specialized/GPU SKUs launched from Q3 2020 will have the hardware accelerator in the name. |
+| Version | Denotes the version of the VM Family Series |
+
