@@ -78,9 +78,9 @@ The table below are created for my own learning purposes and the full descriptio
 | `isPrimaryMeterRegion` | `true` | Indicates whether the [meter region](https://docs.microsoft.com/en-us/azure/virtual-machines/vm-usage) is set as a primary meter or not. Primary meters are used for charges and billing. |
 
 ### Nomenclature Breakdown
-The Azure virtual machine (VM) nomenclature will be used to _translate_ VM names into descriptions such as storage, vCPU, and memory.
+The [Azure virtual machine (VM) nomenclature](https://docs.microsoft.com/en-us/azure/virtual-machines/vm-naming-conventions) will be used to _translate_ VM names into descriptions such as storage, vCPU, and memory.
 
-#### Example
+#### Description
 **[Family]** + _[Sub-family]*_ + **[# of vCPUs]** + _[Constrained vCPUs]*_ + **[Additive Features]** + _[Accelerator Type]*_ + **[Version]**
 
 | Value | Description |
@@ -99,4 +99,25 @@ The Azure virtual machine (VM) nomenclature will be used to _translate_ VM names
 |  | s = Premium Storage capable, including possible use of Ultra SSD (Note: some newer sizes without the attribute of s can still support Premium Storage e.g. M128, M64, etc.) |
 | \*Accelerator Type | Denotes the type of hardware accelerator in the specialized/GPU SKUs. Only the new specialized/GPU SKUs launched from Q3 2020 will have the hardware accelerator in the name. |
 | Version | Denotes the version of the VM Family Series |
+
+#### Example
+**M8-2ms_v2**
+| Value | Description |
+| --- | --- |
+| Family | M |
+| # of vCPUs | 8 |
+| # of constrained (actual) vCPUs | 2 |
+| Additive Features |  	m = memory intensive, s = Premium Storage capable |
+| Version | v2 |
+
+**NC4as_T4_v3**
+| Value | Description |
+| --- | --- |
+| Family | N |
+| Sub-family | C |
+| # of vCPUs | 4 |
+| Additive Features | a = AMD-based processor , s = Premium Storage capable |
+| Accelerator Type | T4 |
+| Version | v3 |
+
 
