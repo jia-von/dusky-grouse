@@ -113,7 +113,6 @@ if (armSkuName.includes(isStandard)){
 };
 
 // Check for VM versions
-
 if (modified_armSkuName.includes('_v1')) {
 	var vm_version = 'v1';
 	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
@@ -137,13 +136,45 @@ if (modified_armSkuName.includes('_v1')) {
 	var sliced_arm_sku = modified_armSkuName;
 }
 
-// Check for acclerator type
-if (sliced_arm_sku.includes('Type1')) {
+// Check for accelerator type present or not
+if (sliced_arm_sku.includes('_')) {
+	var accelerator_type = sliced_arm_sku.slice(sliced_arm_sku.indexOf('_')+1);
+	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.indexOf('_'));
+} else if (sliced_arm_sku.includes('Type1')) {
 	var accelerator_type = 'Type1';
-}</jsScript_script>
+	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
+} else if (sliced_arm_sku.includes('Type2')) {
+	var accelerator_type = 'Type2';
+	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
+} else if (sliced_arm_sku.includes('Type3')) {
+	var accelerator_type = 'Type3';
+	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
+} else if (sliced_arm_sku.includes('Type4')) {
+	var accelerator_type = 'Type4';
+	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
+} else if (sliced_arm_sku.includes('Type5')) {
+	var accelerator_type = 'Type5';
+	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
+} else {
+	var accelerator_type = 'Undefined';
+	var sku_accelerator_removed = sliced_arm_sku;
+}
+
+// Create column for VM series type
+var vm_series = sku_accelerator_removed.slice(0,1);
+var sku_series_removed = sku_accelerator_removed.slice(1);
+</jsScript_script>
       </jsScript>
     </jsScripts>
     <fields>
+      <field>
+        <name>sku_series_removed</name>
+        <rename>sku_series_removed</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
       <field>
         <name>tier_type</name>
         <rename>tier_type</rename>
@@ -153,8 +184,16 @@ if (sliced_arm_sku.includes('Type1')) {
         <replace>N</replace>
       </field>
       <field>
-        <name>sliced_arm_sku</name>
-        <rename>sliced_arm_sku</rename>
+        <name>vm_series</name>
+        <rename>vm_series</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>accelerator_type</name>
+        <rename>accelerator_type</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
@@ -626,71 +665,6 @@ if (sliced_arm_sku.includes('Type1')) {
     <GUI>
       <xloc>144</xloc>
       <yloc>352</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>check_for_vm_sub_family</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>// Check for the index of underscore
-var indexOf_underscore = parseInt(modified_armSkuName.indexOf('_'));
-var indexOf_space = parseInt(modified_armSkuName.indexOf(' '));
-
-// Use slice function to get the accelerator types
-if (indexOf_underscore >= 0) {
-	var accelerator_type = modified_armSkuName.slice(indexOf_underscore+1);
-	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_underscore);
-} else if (modified_armSkuName.match('Type1') == 'Type1'){
-	var accelerator_type = 'Type1';
-	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_space);
-} else if (modified_armSkuName.match('Type2') == 'Type2'){
-	var accelerator_type = 'Type2';
-	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_space);
-} else if (modified_armSkuName.match('Type3') == 'Type3'){
-	var accelerator_type = 'Type3';
-	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_space);
-} else {
-	var accelerator_type = 'Undefined';
-}
-
-// Check for VM sub family
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>accelerator_type</name>
-        <rename>accelerator_type</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>modified_armSkuName</name>
-        <rename>modified_armSkuName</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>Y</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>688</xloc>
-      <yloc>272</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
