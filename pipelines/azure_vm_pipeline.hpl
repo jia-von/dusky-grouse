@@ -62,6 +62,21 @@
       <to>remove_sku_vm_series</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>remove_sku_vm_series</from>
+      <to>vCPU_category</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>vCPU_category</from>
+      <to>remove_vm_sub_series</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>remove_vm_sub_series</from>
+      <to>add_features_categories</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <transform>
     <name>add_skip_pages_count</name>
@@ -86,6 +101,62 @@
     <GUI>
       <xloc>144</xloc>
       <yloc>128</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>categorize_vm_sub_family</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>//Script here
+
+if(isNaN(sku_series_removed.charAt(0))){
+	if (sku_series_removed.charAt(0) == sku_series_removed.charAt(0).toUpperCase()){
+	var vm_sub_series = sku_series_removed.slice(0,1);
+	var sku_sub_series_removed = sku_series_removed.slice(1);
+} else {
+	var vm_sub_series = null;
+	var sku_sub_series_removed = sku_series_removed;
+} 
+} else {
+	var vm_sub_series = null;
+	var sku_sub_series_removed = sku_series_removed;
+}</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>vm_sub_series</name>
+        <rename>vm_sub_series</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>sku_sub_series_removed</name>
+        <rename>sku_sub_series_removed</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>32</yloc>
     </GUI>
   </transform>
   <transform>
@@ -142,7 +213,7 @@ if (modified_armSkuName.includes('_v1')) {
 	var vm_version = 'v6';
 	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
 } else {
-	var vm_version = 'Undefined';
+	var vm_version = null;
 	var sliced_arm_sku = modified_armSkuName;
 }
 
@@ -166,7 +237,7 @@ if (sliced_arm_sku.includes('_')) {
 	var accelerator_type = 'Type5';
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
 } else {
-	var accelerator_type = 'Undefined';
+	var accelerator_type = null;
 	var sku_accelerator_removed = sliced_arm_sku;
 }
 
@@ -220,8 +291,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </fields>
     <attributes/>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>240</yloc>
+      <xloc>368</xloc>
+      <yloc>176</yloc>
     </GUI>
   </transform>
   <transform>
@@ -652,6 +723,32 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </GUI>
   </transform>
   <transform>
+    <name>remove_sku_vm_series</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>sku_series_removed</name>
+      </remove>
+      <remove>
+        <name>tierMinimumUnits</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>32</yloc>
+    </GUI>
+  </transform>
+  <transform>
     <name>select_values</name>
     <type>SelectValues</type>
     <description/>
@@ -678,7 +775,95 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </GUI>
   </transform>
   <transform>
-    <name>categorize_vm_sub_family</name>
+    <name>vCPU_category</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>// Check to see the row has constrained CPU with the presence of '-'
+
+if(sku_sub_series_removed.includes('-')){
+	var constrained_vCPUs = sku_sub_series_removed.slice(sku_sub_series_removed.indexOf('-')+1);
+	var vCPU_add_features = sku_sub_series_removed.slice(0,sku_sub_series_removed.indexOf('-'));
+} else {
+	var constrained_vCPUs = null;
+	var vCPU_add_features = sku_sub_series_removed;
+}
+
+// Isolate vCPU numbers only
+var vCPU = vCPU_add_features.replace(/[a-z]/g,'');
+
+// Isolate additive features only
+var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>vCPU</name>
+        <rename>vCPU</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>add_features</name>
+        <rename>add_features</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>constrained_vCPUs</name>
+        <rename>constrained_vCPUs</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>128</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>remove_vm_sub_series</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>sku_sub_series_removed</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>224</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>add_features_categories</name>
     <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
@@ -695,65 +880,14 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
         <jsScript_name>Script 1</jsScript_name>
         <jsScript_script>//Script here
 
-if(isNaN(sku_series_removed.charAt(0))){
-	if (sku_series_removed.charAt(0) == sku_series_removed.charAt(0).toUpperCase()){
-	var vm_sub_series = sku_series_removed.slice(0,1);
-	var sku_sub_series_removed = sku_series_removed.slice(1);
-} else {
-	var vm_sub_series = 'Undefined';
-	var sku_sub_series_removed = sku_series_removed;
-} 
-} else {
-	var vm_sub_series = 'Undefined';
-	var sku_sub_series_removed = sku_series_removed;
-}</jsScript_script>
+</jsScript_script>
       </jsScript>
     </jsScripts>
-    <fields>
-      <field>
-        <name>vm_sub_series</name>
-        <rename>vm_sub_series</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>sku_sub_series_removed</name>
-        <rename>sku_sub_series_removed</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>480</xloc>
-      <yloc>32</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>remove_sku_vm_series</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <select_unspecified>N</select_unspecified>
-      <remove>
-        <name>sku_series_removed</name>
-      </remove>
-    </fields>
+    <fields>    </fields>
     <attributes/>
     <GUI>
       <xloc>624</xloc>
-      <yloc>32</yloc>
+      <yloc>304</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
