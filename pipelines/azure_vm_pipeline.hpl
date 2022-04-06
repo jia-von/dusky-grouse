@@ -16,7 +16,7 @@
     <created_date>2022/04/05 18:42:30.063</created_date>
     <modified_user>-</modified_user>
     <modified_date>2022/04/05 18:42:30.063</modified_date>
-    <key_for_session_key/>
+    <key_for_session_key>H4sIAAAAAAAA/wMAAAAAAAAAAAA=</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -42,7 +42,59 @@
       <to>json_input</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>json_input</from>
+      <to>JavaScript</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
+  <transform>
+    <name>JavaScript</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>// To check value of the armSkuName for 'Standard'
+
+var isStandard = 'Standard';
+
+var idx = armSkuName.match(isStandard);</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>isStandard</name>
+        <rename>isStandard</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>idx</name>
+        <rename>idx</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>432</xloc>
+      <yloc>352</yloc>
+    </GUI>
+  </transform>
   <transform>
     <name>add_skip_pages_count</name>
     <type>Sequence</type>
@@ -54,56 +106,18 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <connection/>
     <counter_name>skip_pages_parameter</counter_name>
     <use_counter>Y</use_counter>
     <use_database>N</use_database>
     <increment_by>100</increment_by>
     <max_value>1000000</max_value>
-    <schema/>
     <seqname>SEQ_</seqname>
     <start_at>100</start_at>
     <valuename>skip_pages_count</valuename>
     <attributes/>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>272</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>generate_row_azure_retail_api</name>
-    <type>RowGenerator</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <currency/>
-        <decimal/>
-        <format/>
-        <group/>
-        <length>-1</length>
-        <name>azure_vm_retail_pricing_api</name>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-        <type>String</type>
-        <nullif>https://prices.azure.com/api/retail/prices?$filter=serviceName%20eq%20%27Virtual%20Machines%27&amp;$skip=</nullif>
-      </field>
-    </fields>
-    <interval_in_ms>5000</interval_in_ms>
-    <last_time_field>FiveSecondsAgo</last_time_field>
-    <never_ending>N</never_ending>
-    <limit>100000</limit>
-    <row_time_field>now</row_time_field>
-    <attributes/>
-    <GUI>
       <xloc>144</xloc>
-      <yloc>272</yloc>
+      <yloc>128</yloc>
     </GUI>
   </transform>
   <transform>
@@ -156,13 +170,13 @@
     </ConcatFields>
     <attributes/>
     <GUI>
-      <xloc>512</xloc>
-      <yloc>272</yloc>
+      <xloc>144</xloc>
+      <yloc>224</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>select_values</name>
-    <type>SelectValues</type>
+    <name>generate_row_azure_retail_api</name>
+    <type>RowGenerator</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -172,18 +186,24 @@
       <schema_name/>
     </partitioning>
     <fields>
-      <select_unspecified>N</select_unspecified>
-      <remove>
+      <field>
+        <length>-1</length>
         <name>azure_vm_retail_pricing_api</name>
-      </remove>
-      <remove>
-        <name>skip_pages_count</name>
-      </remove>
+        <precision>-1</precision>
+        <set_empty_string>N</set_empty_string>
+        <type>String</type>
+        <nullif>https://prices.azure.com/api/retail/prices?$filter=serviceName%20eq%20%27Virtual%20Machines%27&amp;$skip=</nullif>
+      </field>
     </fields>
+    <interval_in_ms>5000</interval_in_ms>
+    <last_time_field>FiveSecondsAgo</last_time_field>
+    <never_ending>N</never_ending>
+    <limit>100000</limit>
+    <row_time_field>now</row_time_field>
     <attributes/>
     <GUI>
-      <xloc>640</xloc>
-      <yloc>272</yloc>
+      <xloc>144</xloc>
+      <yloc>32</yloc>
     </GUI>
   </transform>
   <transform>
@@ -491,8 +511,34 @@
     <sizeFieldName/>
     <attributes/>
     <GUI>
-      <xloc>784</xloc>
-      <yloc>272</yloc>
+      <xloc>304</xloc>
+      <yloc>352</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>select_values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>azure_vm_retail_pricing_api</name>
+      </remove>
+      <remove>
+        <name>skip_pages_count</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>144</xloc>
+      <yloc>352</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
