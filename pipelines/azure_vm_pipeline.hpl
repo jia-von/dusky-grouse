@@ -52,26 +52,6 @@
       <to>categorizing_vm_versions_and_tier_type</to>
       <enabled>Y</enabled>
     </hop>
-    <hop>
-      <from>categorizing_vm_versions_and_tier_type</from>
-      <to>remove_tier_type</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>remove_tier_type</from>
-      <to>remove_vm_version</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>remove_vm_version</from>
-      <to>create_family_series</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>create_family_series</from>
-      <to>trim_modified_arm_sku</to>
-      <enabled>Y</enabled>
-    </hop>
   </order>
   <transform>
     <name>add_skip_pages_count</name>
@@ -96,6 +76,103 @@
     <GUI>
       <xloc>144</xloc>
       <yloc>128</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>categorizing_vm_versions_and_tier_type</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>// To check value of the armSkuName for 'Standard' or 'Basic'
+
+// Define the variable in string 'Standard' and 'Basic'
+var isStandard = 'Standard';
+var isBasic = 'Basic';
+
+// if else statement to check for tier_type
+if (armSkuName.includes(isStandard)){
+	var tier_type = 'Standard';
+	var modified_armSkuName = armSkuName.slice(9);
+} else if (armSkuName.includes(isBasic)) {
+	var tier_type = 'Basic';
+	var modified_armSkuName = armSkuName.slice(6);
+} else {
+	var tier_type = 'Gateway';
+	var modified_armSkuName = armSkuName;
+};
+
+// Check for VM versions
+
+if (modified_armSkuName.includes('_v1')) {
+	var vm_version = 'v1';
+	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
+} else if (modified_armSkuName.includes('_v2')) {
+	var vm_version = 'v2';
+	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
+} else if (modified_armSkuName.includes('_v3')) {
+	var vm_version = 'v3';
+	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
+} else if (modified_armSkuName.includes('_v4')) {
+	var vm_version = 'v4';
+	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
+} else if (modified_armSkuName.includes('_v5')) {
+	var vm_version = 'v5';
+	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
+} else if (modified_armSkuName.includes('_v6')) {
+	var vm_version = 'v6';
+	var sliced_arm_sku = modified_armSkuName.slice(0,modified_armSkuName.lastIndexOf('_'));
+} else {
+	var vm_version = 'Undefined';
+	var sliced_arm_sku = modified_armSkuName;
+}
+
+// Check for acclerator type
+if (sliced_arm_sku.includes('Type1')) {
+	var accelerator_type = 'Type1';
+}</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>tier_type</name>
+        <rename>tier_type</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>sliced_arm_sku</name>
+        <rename>sliced_arm_sku</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>vm_version</name>
+        <rename>vm_version</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>240</yloc>
     </GUI>
   </transform>
   <transform>
@@ -182,81 +259,6 @@
     <GUI>
       <xloc>144</xloc>
       <yloc>32</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>categorizing_vm_versions_and_tier_type</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>// To check value of the armSkuName for 'Standard' or 'Basic'
-
-// Define the variable in string 'Standard' and 'Basic'
-var isStandard = 'Standard';
-var isBasic = 'Basic';
-
-// if else statement to check for tier_type
-if (armSkuName.match(isStandard) == isStandard){
-	var tier_type = 'Standard';
-} else if (armSkuName.match(isBasic) == isBasic) {
-	var tier_type = 'Basic';
-} else {
-	var tier_type = 'Gateway';
-};
-
-// make a if else matching for versions
-if (armSkuName.match('_v1') == '_v1'){
-	var vm_version = 'v1';
-} else if (armSkuName.match('_v2') == '_v2'){
-	var vm_version = 'v2';
-} else if (armSkuName.match('_v3') == '_v3'){
-	var vm_version = 'v3';
-} else if (armSkuName.match('_v4') == '_v4'){
-	var vm_version = 'v4';
-} else if (armSkuName.match('_v5') == '_v5'){
-	var vm_version = 'v5';
-} else if (armSkuName.match('_v6') == '_v6'){
-	var vm_version = 'v6';
-} else {
-	var vm_version = 'Undefined';
-};
-
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>tier_type</name>
-        <rename>tier_type</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>vm_version</name>
-        <rename>vm_version</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>480</xloc>
-      <yloc>240</yloc>
     </GUI>
   </transform>
   <transform>
@@ -627,8 +629,8 @@ if (armSkuName.match('_v1') == '_v1'){
     </GUI>
   </transform>
   <transform>
-    <name>remove_tier_type</name>
-    <type>ReplaceString</type>
+    <name>check_for_vm_sub_family</name>
+    <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -637,118 +639,58 @@ if (armSkuName.match('_v1') == '_v1'){
       <method>none</method>
       <schema_name/>
     </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>// Check for the index of underscore
+var indexOf_underscore = parseInt(modified_armSkuName.indexOf('_'));
+var indexOf_space = parseInt(modified_armSkuName.indexOf(' '));
+
+// Use slice function to get the accelerator types
+if (indexOf_underscore >= 0) {
+	var accelerator_type = modified_armSkuName.slice(indexOf_underscore+1);
+	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_underscore);
+} else if (modified_armSkuName.match('Type1') == 'Type1'){
+	var accelerator_type = 'Type1';
+	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_space);
+} else if (modified_armSkuName.match('Type2') == 'Type2'){
+	var accelerator_type = 'Type2';
+	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_space);
+} else if (modified_armSkuName.match('Type3') == 'Type3'){
+	var accelerator_type = 'Type3';
+	var modified_armSkuName = modified_armSkuName.slice(0,indexOf_space);
+} else {
+	var accelerator_type = 'Undefined';
+}
+
+// Check for VM sub family
+</jsScript_script>
+      </jsScript>
+    </jsScripts>
     <fields>
       <field>
-        <in_stream_name>armSkuName</in_stream_name>
-        <out_stream_name>modified_armSkuName</out_stream_name>
-        <use_regex>yes</use_regex>
-        <replace_string>(Standard_)|(Basic_)</replace_string>
-        <replace_by_string/>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-        <is_unicode>no</is_unicode>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>480</xloc>
-      <yloc>160</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>remove_vm_version</name>
-    <type>ReplaceString</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <in_stream_name>modified_armSkuName</in_stream_name>
-        <out_stream_name/>
-        <use_regex>yes</use_regex>
-        <replace_string>(_v1)|(_v2)|(_v3)|(_v4)|(_v5)|(_v6)</replace_string>
-        <replace_by_string/>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-        <is_unicode>no</is_unicode>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>480</xloc>
-      <yloc>80</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>create_family_series</name>
-    <type>StringCut</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <cut_from/>
-        <cut_to>1</cut_to>
-        <in_stream_name>modified_armSkuName</in_stream_name>
-        <out_stream_name>family_series</out_stream_name>
+        <name>accelerator_type</name>
+        <rename>accelerator_type</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
       </field>
       <field>
-        <cut_from>1</cut_from>
-        <cut_to>20</cut_to>
-        <in_stream_name>modified_armSkuName</in_stream_name>
-        <out_stream_name/>
+        <name>modified_armSkuName</name>
+        <rename>modified_armSkuName</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>Y</replace>
       </field>
     </fields>
     <attributes/>
     <GUI>
       <xloc>688</xloc>
-      <yloc>80</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>trim_modified_arm_sku</name>
-    <type>StringOperations</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <in_stream_name>modified_armSkuName</in_stream_name>
-        <out_stream_name/>
-        <trim_type>both</trim_type>
-        <lower_upper>none</lower_upper>
-        <padding_type>none</padding_type>
-        <pad_char/>
-        <pad_len/>
-        <init_cap>no</init_cap>
-        <mask_xml>none</mask_xml>
-        <digits>none</digits>
-        <remove_special_characters>none</remove_special_characters>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>688</xloc>
-      <yloc>176</yloc>
+      <yloc>272</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
