@@ -49,7 +49,17 @@
     </hop>
     <hop>
       <from>remove_redundant_fields</from>
-      <to>categorizing_vm_versions_and_tier_type</to>
+      <to>categorize_vm_tierType_series_accelerator_type_versions</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>categorize_vm_tierType_series_accelerator_type_versions</from>
+      <to>categorize_vm_sub_family</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>categorize_vm_sub_family</from>
+      <to>remove_sku_vm_series</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -79,7 +89,7 @@
     </GUI>
   </transform>
   <transform>
-    <name>categorizing_vm_versions_and_tier_type</name>
+    <name>categorize_vm_tierType_series_accelerator_type_versions</name>
     <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
@@ -665,6 +675,85 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     <GUI>
       <xloc>144</xloc>
       <yloc>352</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>categorize_vm_sub_family</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>//Script here
+
+if(isNaN(sku_series_removed.charAt(0))){
+	if (sku_series_removed.charAt(0) == sku_series_removed.charAt(0).toUpperCase()){
+	var vm_sub_series = sku_series_removed.slice(0,1);
+	var sku_sub_series_removed = sku_series_removed.slice(1);
+} else {
+	var vm_sub_series = 'Undefined';
+	var sku_sub_series_removed = sku_series_removed;
+} 
+} else {
+	var vm_sub_series = 'Undefined';
+	var sku_sub_series_removed = sku_series_removed;
+}</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>vm_sub_series</name>
+        <rename>vm_sub_series</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>sku_sub_series_removed</name>
+        <rename>sku_sub_series_removed</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>32</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>remove_sku_vm_series</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>sku_series_removed</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>32</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
