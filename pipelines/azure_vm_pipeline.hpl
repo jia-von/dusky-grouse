@@ -44,57 +44,15 @@
     </hop>
     <hop>
       <from>json_input</from>
-      <to>JavaScript</to>
+      <to>remove_redundant_fields</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>remove_redundant_fields</from>
+      <to>javascript_matching_regexp</to>
       <enabled>Y</enabled>
     </hop>
   </order>
-  <transform>
-    <name>JavaScript</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>// To check value of the armSkuName for 'Standard'
-
-var isStandard = 'Standard';
-
-var idx = armSkuName.match(isStandard);</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>isStandard</name>
-        <rename>isStandard</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>idx</name>
-        <rename>idx</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>432</xloc>
-      <yloc>352</yloc>
-    </GUI>
-  </transform>
   <transform>
     <name>add_skip_pages_count</name>
     <type>Sequence</type>
@@ -204,6 +162,81 @@ var idx = armSkuName.match(isStandard);</jsScript_script>
     <GUI>
       <xloc>144</xloc>
       <yloc>32</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>javascript_matching_regexp</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>// To check value of the armSkuName for 'Standard' or 'Basic'
+
+// Define the variable in string 'Standard' and 'Basic'
+var isStandard = 'Standard';
+var isBasic = 'Basic';
+
+// if else statement to check for tier_type
+if (armSkuName.match(isStandard) == isStandard){
+	var tier_type = 'Standard';
+} else if (armSkuName.match(isBasic) == isBasic) {
+	var tier_type = 'Basic';
+} else {
+	var tier_type = 'Gateway';
+};
+
+// make a if else matching for versions
+if (armSkuName.match('_v1') == '_v1'){
+	var vm_version = 'v1';
+} else if (armSkuName.match('_v2') == '_v2'){
+	var vm_version = 'v2';
+} else if (armSkuName.match('_v3') == '_v3'){
+	var vm_version = 'v3';
+} else if (armSkuName.match('_v4') == '_v4'){
+	var vm_version = 'v4';
+} else if (armSkuName.match('_v5') == '_v5'){
+	var vm_version = 'v5';
+} else if (armSkuName.match('_v6') == '_v6'){
+	var vm_version = 'v6';
+} else {
+	var vm_version = 'Undefined';
+};
+
+</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>tier_type</name>
+        <rename>tier_type</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>vm_version</name>
+        <rename>vm_version</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>736</xloc>
+      <yloc>352</yloc>
     </GUI>
   </transform>
   <transform>
@@ -512,6 +545,38 @@ var idx = armSkuName.match(isStandard);</jsScript_script>
     <attributes/>
     <GUI>
       <xloc>304</xloc>
+      <yloc>352</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>remove_redundant_fields</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>serviceName</name>
+      </remove>
+      <remove>
+        <name>serviceFamily</name>
+      </remove>
+      <remove>
+        <name>currencyCode</name>
+      </remove>
+      <remove>
+        <name>skuName</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>480</xloc>
       <yloc>352</yloc>
     </GUI>
   </transform>
