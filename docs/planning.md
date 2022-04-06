@@ -120,4 +120,10 @@ The [Azure virtual machine (VM) nomenclature](https://docs.microsoft.com/en-us/a
 | Accelerator Type | T4 |
 | Version | v3 |
 
+#### Observation
+Based on the examples above, it is noted that:
+- **Accelerator Type** has an underscore appended before the model, **\_T4** and it will be appended by an underscore after because it occupies the second last column before **Version**.
+- **Version** occupies the last column and will have an underscore appendded before the model, **\_v3**.
+- **# constrained vCPU** which is pressumed to be an optional feature for VM has a dash appended before an integer, **-2**.
+- **Additive Features** is noted to come in lower case alphabet pairs, **as** or **ms**.
 
