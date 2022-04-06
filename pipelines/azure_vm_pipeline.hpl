@@ -49,7 +49,27 @@
     </hop>
     <hop>
       <from>remove_redundant_fields</from>
-      <to>javascript_matching_regexp</to>
+      <to>categorizing_vm_versions_and_tier_type</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>categorizing_vm_versions_and_tier_type</from>
+      <to>remove_tier_type</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>remove_tier_type</from>
+      <to>remove_vm_version</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>remove_vm_version</from>
+      <to>create_family_series</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>create_family_series</from>
+      <to>trim_modified_arm_sku</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -165,7 +185,7 @@
     </GUI>
   </transform>
   <transform>
-    <name>javascript_matching_regexp</name>
+    <name>categorizing_vm_versions_and_tier_type</name>
     <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
@@ -235,8 +255,8 @@ if (armSkuName.match('_v1') == '_v1'){
     </fields>
     <attributes/>
     <GUI>
-      <xloc>736</xloc>
-      <yloc>352</yloc>
+      <xloc>480</xloc>
+      <yloc>240</yloc>
     </GUI>
   </transform>
   <transform>
@@ -604,6 +624,131 @@ if (armSkuName.match('_v1') == '_v1'){
     <GUI>
       <xloc>144</xloc>
       <yloc>352</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>remove_tier_type</name>
+    <type>ReplaceString</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>armSkuName</in_stream_name>
+        <out_stream_name>modified_armSkuName</out_stream_name>
+        <use_regex>yes</use_regex>
+        <replace_string>(Standard_)|(Basic_)</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>160</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>remove_vm_version</name>
+    <type>ReplaceString</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>modified_armSkuName</in_stream_name>
+        <out_stream_name/>
+        <use_regex>yes</use_regex>
+        <replace_string>(_v1)|(_v2)|(_v3)|(_v4)|(_v5)|(_v6)</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>480</xloc>
+      <yloc>80</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>create_family_series</name>
+    <type>StringCut</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <cut_from/>
+        <cut_to>1</cut_to>
+        <in_stream_name>modified_armSkuName</in_stream_name>
+        <out_stream_name>family_series</out_stream_name>
+      </field>
+      <field>
+        <cut_from>1</cut_from>
+        <cut_to>20</cut_to>
+        <in_stream_name>modified_armSkuName</in_stream_name>
+        <out_stream_name/>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>688</xloc>
+      <yloc>80</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>trim_modified_arm_sku</name>
+    <type>StringOperations</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>modified_armSkuName</in_stream_name>
+        <out_stream_name/>
+        <trim_type>both</trim_type>
+        <lower_upper>none</lower_upper>
+        <padding_type>none</padding_type>
+        <pad_char/>
+        <pad_len/>
+        <init_cap>no</init_cap>
+        <mask_xml>none</mask_xml>
+        <digits>none</digits>
+        <remove_special_characters>none</remove_special_characters>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>688</xloc>
+      <yloc>176</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
