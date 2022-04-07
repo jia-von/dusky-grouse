@@ -883,7 +883,64 @@ var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
 </jsScript_script>
       </jsScript>
     </jsScripts>
-    <fields>    </fields>
+    <fields>
+      <field>
+        <name>amd_processor</name>
+        <rename>amd_processor</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>diskfull</name>
+        <rename>diskfull</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>isolated_size</name>
+        <rename>isolated_size</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>low_memory</name>
+        <rename>low_memory</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>memory_intensive</name>
+        <rename>memory_intensive</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>tiny_memory</name>
+        <rename>tiny_memory</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>premium_storage</name>
+        <rename>premium_storage</rename>
+        <type>None</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
     <attributes/>
     <GUI>
       <xloc>624</xloc>
