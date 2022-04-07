@@ -20,6 +20,66 @@
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
+    <notepad>
+      <note>Extraction</note>
+      <xloc>224</xloc>
+      <yloc>32</yloc>
+      <width>97</width>
+      <heigth>34</heigth>
+      <fontname>Segoe UI</fontname>
+      <fontsize>14</fontsize>
+      <fontbold>Y</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>14</fontcolorred>
+      <fontcolorgreen>58</fontcolorgreen>
+      <fontcolorblue>90</fontcolorblue>
+      <backgroundcolorred>201</backgroundcolorred>
+      <backgroundcolorgreen>232</backgroundcolorgreen>
+      <backgroundcolorblue>251</backgroundcolorblue>
+      <bordercolorred>14</bordercolorred>
+      <bordercolorgreen>58</bordercolorgreen>
+      <bordercolorblue>90</bordercolorblue>
+    </notepad>
+    <notepad>
+      <note>Transform</note>
+      <xloc>656</xloc>
+      <yloc>32</yloc>
+      <width>98</width>
+      <heigth>34</heigth>
+      <fontname>Segoe UI</fontname>
+      <fontsize>14</fontsize>
+      <fontbold>Y</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>14</fontcolorred>
+      <fontcolorgreen>58</fontcolorgreen>
+      <fontcolorblue>90</fontcolorblue>
+      <backgroundcolorred>201</backgroundcolorred>
+      <backgroundcolorgreen>232</backgroundcolorgreen>
+      <backgroundcolorblue>251</backgroundcolorblue>
+      <bordercolorred>14</bordercolorred>
+      <bordercolorgreen>58</bordercolorgreen>
+      <bordercolorblue>90</bordercolorblue>
+    </notepad>
+    <notepad>
+      <note>Load</note>
+      <xloc>1120</xloc>
+      <yloc>32</yloc>
+      <width>52</width>
+      <heigth>34</heigth>
+      <fontname>Segoe UI</fontname>
+      <fontsize>14</fontsize>
+      <fontbold>Y</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>14</fontcolorred>
+      <fontcolorgreen>58</fontcolorgreen>
+      <fontcolorblue>90</fontcolorblue>
+      <backgroundcolorred>201</backgroundcolorred>
+      <backgroundcolorgreen>232</backgroundcolorgreen>
+      <backgroundcolorblue>251</backgroundcolorblue>
+      <bordercolorred>14</bordercolorred>
+      <bordercolorgreen>58</bordercolorgreen>
+      <bordercolorblue>90</bordercolorblue>
+    </notepad>
   </notepads>
   <order>
     <hop>
@@ -77,6 +137,11 @@
       <to>remove_add_features</to>
       <enabled>Y</enabled>
     </hop>
+    <hop>
+      <from>remove_add_features</from>
+      <to>azure_vm_final_output</to>
+      <enabled>Y</enabled>
+    </hop>
   </order>
   <transform>
     <name>add_skip_pages_count</name>
@@ -99,8 +164,8 @@
     <valuename>skip_pages_count</valuename>
     <attributes/>
     <GUI>
-      <xloc>144</xloc>
-      <yloc>128</yloc>
+      <xloc>256</xloc>
+      <yloc>208</yloc>
     </GUI>
   </transform>
   <transform>
@@ -155,8 +220,8 @@ if(isNaN(sku_series_removed.charAt(0))){
     </fields>
     <attributes/>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>32</yloc>
+      <xloc>560</xloc>
+      <yloc>288</yloc>
     </GUI>
   </transform>
   <transform>
@@ -291,8 +356,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </fields>
     <attributes/>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>176</yloc>
+      <xloc>560</xloc>
+      <yloc>416</yloc>
     </GUI>
   </transform>
   <transform>
@@ -345,14 +410,16 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </ConcatFields>
     <attributes/>
     <GUI>
-      <xloc>144</xloc>
-      <yloc>224</yloc>
+      <xloc>256</xloc>
+      <yloc>304</yloc>
     </GUI>
   </transform>
   <transform>
     <name>generate_row_azure_retail_api</name>
     <type>RowGenerator</type>
-    <description/>
+    <description>This transform generate rows of identical
+Azure retail API for concatenation using
+API pagination.</description>
     <distribute>Y</distribute>
     <custom_distribution/>
     <copies>1</copies>
@@ -377,8 +444,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     <row_time_field>now</row_time_field>
     <attributes/>
     <GUI>
-      <xloc>144</xloc>
-      <yloc>32</yloc>
+      <xloc>256</xloc>
+      <yloc>96</yloc>
     </GUI>
   </transform>
   <transform>
@@ -686,8 +753,39 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     <sizeFieldName/>
     <attributes/>
     <GUI>
-      <xloc>304</xloc>
-      <yloc>352</yloc>
+      <xloc>256</xloc>
+      <yloc>560</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>remove_add_features</name>
+    <type>ReplaceString</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <in_stream_name>constrained_vCPUs</in_stream_name>
+        <out_stream_name/>
+        <use_regex>yes</use_regex>
+        <replace_string>[a-z]</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>816</xloc>
+      <yloc>416</yloc>
     </GUI>
   </transform>
   <transform>
@@ -718,8 +816,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </fields>
     <attributes/>
     <GUI>
-      <xloc>480</xloc>
-      <yloc>352</yloc>
+      <xloc>560</xloc>
+      <yloc>560</yloc>
     </GUI>
   </transform>
   <transform>
@@ -744,8 +842,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </fields>
     <attributes/>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>32</yloc>
+      <xloc>560</xloc>
+      <yloc>176</yloc>
     </GUI>
   </transform>
   <transform>
@@ -762,99 +860,75 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     <fields>
       <field>
         <name>retailPrice</name>
-        <rename/>
       </field>
       <field>
         <name>unitPrice</name>
-        <rename/>
       </field>
       <field>
         <name>armRegionName</name>
-        <rename/>
       </field>
       <field>
         <name>location</name>
-        <rename/>
       </field>
       <field>
         <name>effectiveStartDate</name>
-        <rename/>
       </field>
       <field>
         <name>meterId</name>
-        <rename/>
       </field>
       <field>
         <name>meterName</name>
-        <rename/>
       </field>
       <field>
         <name>productId</name>
-        <rename/>
       </field>
       <field>
         <name>skuId</name>
-        <rename/>
       </field>
       <field>
         <name>productName</name>
-        <rename/>
       </field>
       <field>
         <name>serviceId</name>
-        <rename/>
       </field>
       <field>
         <name>unitOfMeasure</name>
-        <rename/>
       </field>
       <field>
         <name>type</name>
-        <rename/>
       </field>
       <field>
         <name>isPrimaryMeterRegion</name>
-        <rename/>
       </field>
       <field>
         <name>armSkuName</name>
-        <rename/>
       </field>
       <field>
         <name>tier_type</name>
-        <rename/>
       </field>
       <field>
         <name>vm_series</name>
-        <rename/>
       </field>
       <field>
         <name>vm_sub_series</name>
-        <rename/>
       </field>
       <field>
         <name>sku_sub_series_removed</name>
-        <rename/>
       </field>
       <field>
         <name>vCPU</name>
-        <rename/>
       </field>
       <field>
         <name>constrained_vCPUs</name>
-        <rename/>
       </field>
       <field>
         <name>add_features</name>
-        <rename/>
       </field>
       <field>
         <name>accelerator_type</name>
-        <rename/>
       </field>
       <field>
         <name>vm_version</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
       <remove>
@@ -866,8 +940,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </fields>
     <attributes/>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>224</yloc>
+      <xloc>816</xloc>
+      <yloc>288</yloc>
     </GUI>
   </transform>
   <transform>
@@ -892,8 +966,8 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </fields>
     <attributes/>
     <GUI>
-      <xloc>144</xloc>
-      <yloc>352</yloc>
+      <xloc>256</xloc>
+      <yloc>432</yloc>
     </GUI>
   </transform>
   <transform>
@@ -957,13 +1031,13 @@ var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
     </fields>
     <attributes/>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>128</yloc>
+      <xloc>816</xloc>
+      <yloc>176</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>remove_add_features</name>
-    <type>ReplaceString</type>
+    <name>azure_vm_final_output</name>
+    <type>TextFileOutput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -972,24 +1046,306 @@ var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
       <method>none</method>
       <schema_name/>
     </partitioning>
+    <separator>,</separator>
+    <enclosure/>
+    <enclosure_forced>N</enclosure_forced>
+    <enclosure_fix_disabled>N</enclosure_fix_disabled>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding>windows-1252</encoding>
+    <endedLine/>
+    <fileNameInField>N</fileNameInField>
+    <fileNameField/>
+    <create_parent_folder>Y</create_parent_folder>
+    <file>
+      <name>${PROJECT_HOME}/azure_csv_file_output.txt</name>
+      <servlet_output>N</servlet_output>
+      <do_not_open_new_file_init>N</do_not_open_new_file_init>
+      <extention>csv</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery/>
+    </file>
     <fields>
       <field>
-        <in_stream_name>constrained_vCPUs</in_stream_name>
-        <out_stream_name/>
-        <use_regex>yes</use_regex>
-        <replace_string>[a-z]</replace_string>
-        <replace_by_string/>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-        <is_unicode>no</is_unicode>
+        <name>retailPrice</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>unitPrice</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>armRegionName</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>location</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>effectiveStartDate</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>meterId</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>meterName</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>productId</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>skuId</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>productName</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>serviceId</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>unitOfMeasure</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>isPrimaryMeterRegion</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>armSkuName</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>tier_type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>vm_series</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>vm_sub_series</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>vCPU</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>constrained_vCPUs</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>accelerator_type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>vm_version</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
       </field>
     </fields>
     <attributes/>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>304</yloc>
+      <xloc>1136</xloc>
+      <yloc>176</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
