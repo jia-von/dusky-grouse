@@ -74,7 +74,7 @@
     </hop>
     <hop>
       <from>remove_vm_sub_series</from>
-      <to>add_features_categories</to>
+      <to>remove_add_features</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -749,6 +749,128 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
     </GUI>
   </transform>
   <transform>
+    <name>remove_vm_sub_series</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>retailPrice</name>
+        <rename/>
+      </field>
+      <field>
+        <name>unitPrice</name>
+        <rename/>
+      </field>
+      <field>
+        <name>armRegionName</name>
+        <rename/>
+      </field>
+      <field>
+        <name>location</name>
+        <rename/>
+      </field>
+      <field>
+        <name>effectiveStartDate</name>
+        <rename/>
+      </field>
+      <field>
+        <name>meterId</name>
+        <rename/>
+      </field>
+      <field>
+        <name>meterName</name>
+        <rename/>
+      </field>
+      <field>
+        <name>productId</name>
+        <rename/>
+      </field>
+      <field>
+        <name>skuId</name>
+        <rename/>
+      </field>
+      <field>
+        <name>productName</name>
+        <rename/>
+      </field>
+      <field>
+        <name>serviceId</name>
+        <rename/>
+      </field>
+      <field>
+        <name>unitOfMeasure</name>
+        <rename/>
+      </field>
+      <field>
+        <name>type</name>
+        <rename/>
+      </field>
+      <field>
+        <name>isPrimaryMeterRegion</name>
+        <rename/>
+      </field>
+      <field>
+        <name>armSkuName</name>
+        <rename/>
+      </field>
+      <field>
+        <name>tier_type</name>
+        <rename/>
+      </field>
+      <field>
+        <name>vm_series</name>
+        <rename/>
+      </field>
+      <field>
+        <name>vm_sub_series</name>
+        <rename/>
+      </field>
+      <field>
+        <name>sku_sub_series_removed</name>
+        <rename/>
+      </field>
+      <field>
+        <name>vCPU</name>
+        <rename/>
+      </field>
+      <field>
+        <name>constrained_vCPUs</name>
+        <rename/>
+      </field>
+      <field>
+        <name>add_features</name>
+        <rename/>
+      </field>
+      <field>
+        <name>accelerator_type</name>
+        <rename/>
+      </field>
+      <field>
+        <name>vm_version</name>
+        <rename/>
+      </field>
+      <select_unspecified>N</select_unspecified>
+      <remove>
+        <name>sku_sub_series_removed</name>
+      </remove>
+      <remove>
+        <name>add_features</name>
+      </remove>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>624</xloc>
+      <yloc>224</yloc>
+    </GUI>
+  </transform>
+  <transform>
     <name>select_values</name>
     <type>SelectValues</type>
     <description/>
@@ -840,8 +962,8 @@ var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
     </GUI>
   </transform>
   <transform>
-    <name>remove_vm_sub_series</name>
-    <type>SelectValues</type>
+    <name>remove_add_features</name>
+    <type>ReplaceString</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -851,94 +973,17 @@ var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
       <schema_name/>
     </partitioning>
     <fields>
-      <select_unspecified>N</select_unspecified>
-      <remove>
-        <name>sku_sub_series_removed</name>
-      </remove>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>624</xloc>
-      <yloc>224</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>add_features_categories</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>//Script here
-
-</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
       <field>
-        <name>amd_processor</name>
-        <rename>amd_processor</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>diskfull</name>
-        <rename>diskfull</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>isolated_size</name>
-        <rename>isolated_size</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>low_memory</name>
-        <rename>low_memory</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>memory_intensive</name>
-        <rename>memory_intensive</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>tiny_memory</name>
-        <rename>tiny_memory</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>premium_storage</name>
-        <rename>premium_storage</rename>
-        <type>None</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
+        <in_stream_name>constrained_vCPUs</in_stream_name>
+        <out_stream_name/>
+        <use_regex>yes</use_regex>
+        <replace_string>[a-z]</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
       </field>
     </fields>
     <attributes/>
