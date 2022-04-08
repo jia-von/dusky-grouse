@@ -146,4 +146,16 @@ According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/detail
 - Ubuntu Advantage Advanced
 - Machine Learning Server on Red Hat Enterprise Linux
 - Machine Learning Server on Ubuntu or Centos Linux
-- 
+- SQL Server Enterprise Ubuntu Linux
+- SQL Server Standard Ubuntu Linux
+- SQL Server Web Ubuntu Linux
+- SQL Server Enterprise Red Hat Linux
+- SQL Server Standard Red Hat Linux
+- SQL Server Web Red Hat Linux
+- SQL Server Enterprise SUSE Priority
+- SQL Server Standard SUSE Priority
+- SQL Server Web SUSE Priority
+- SQL Server Enterprise Ubuntu Pro
+- SQL Server Standard Ubuntu Pro
+- SQL Server Web Ubuntu Pro
+- SQL Server Developer Ubuntu Pro
