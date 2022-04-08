@@ -17,3 +17,14 @@ You may clone the repository using the command below within Git Bash Terminal fo
 git clone https://github.com/jia-von/dusky-grouse.git
 ```
 
+Clone the `dusky-grouse` project into the Hop projects folder as shown below:
+```
+hop/
+  |-- config/
+    |-- metadata/
+    |-- projects/
+      |--default/
+      |--dusky-grouse/ <-- clone directory here.
+      |--samples/
+    |--hop-config.json
+```
