@@ -177,3 +177,10 @@ According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/detail
 - Storage optimized
 - GPU
 - High performance compute
+
+### Others
+Other inputs considered in VM pricing options:
+- VM Series
+- Region
+- Currency
+- Display pricing by
