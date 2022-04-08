@@ -169,3 +169,11 @@ According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/detail
 - SQL Server Enterprise
 - SQL Server Standard
 - SQL Server Web
+
+### Category
+- General purpose
+- Compute optimized
+- Memory optimized
+- Storage optimized
+- GPU
+- High performance compute
