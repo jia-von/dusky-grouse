@@ -127,3 +127,64 @@ Based on the examples above, it is noted that:
 - **# constrained vCPU** which is pressumed to be an optional feature for VM has a dash appended before an integer, **-2**.
 - **Additive Features** is noted to come in lower case alphabet pairs, **as** or **ms**.
 
+## Azure Virtual Machine Calculator Review
+According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/) page, there a few inputs a potential customer need to use to decide on the VM pricing:
+
+### OS/Software
+**Linux**
+- CentOS or Ubuntu Linux
+- Red Hat Enterprise Linux
+- Red Hat Enterprise Linux with HA
+- RHEL for SAP with HA
+- RHEL for SAP Business Applications
+- SUSE Linux Enterprise + Patching Only
+- SUSE Linux Enterprise + 24x7 Support
+- SUSE Linux Enterprise for HPC + 24x7 Support
+- SUSE Linux Enterprise for SAP Application + 24x7 Support
+- Ubuntu Advantage Essential
+- Ubuntu Advantage Standard
+- Ubuntu Advantage Advanced
+- Machine Learning Server on Red Hat Enterprise Linux
+- Machine Learning Server on Ubuntu or Centos Linux
+- SQL Server Enterprise Ubuntu Linux
+- SQL Server Standard Ubuntu Linux
+- SQL Server Web Ubuntu Linux
+- SQL Server Enterprise Red Hat Linux
+- SQL Server Standard Red Hat Linux
+- SQL Server Web Red Hat Linux
+- SQL Server Enterprise SUSE Priority
+- SQL Server Standard SUSE Priority
+- SQL Server Web SUSE Priority
+- SQL Server Enterprise Ubuntu Pro
+- SQL Server Standard Ubuntu Pro
+- SQL Server Web Ubuntu Pro
+- SQL Server Developer Ubuntu Pro
+
+**Windows**
+- Windows OS
+- BizTalk Enterprise
+- BizTalk Standard
+- Machine Learning Server
+- Share Point
+- SQL Server Enterprise
+- SQL Server Standard
+- SQL Server Web
+
+### Category
+- [ ] General purpose
+- [ ] Compute optimized
+- [ ] Memory optimized
+- [ ] Storage optimized
+- [ ] GPU
+- [ ] High performance compute
+
+### Others
+Other inputs considered in VM pricing options:
+- [x] VM Series
+- [x] Region
+- [x] Currency
+- [ ] Display pricing by: _month_ or _hour_
+- [x] [Spot](https://azure.microsoft.com/en-ca/services/virtual-machines/spot/)
+- [x] [Low-priority](https://azure.microsoft.com/en-ca/blog/low-priority-scale-sets/)
+- [x] vCPUs
+- [x] Constrained vCPUs
