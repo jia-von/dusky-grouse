@@ -159,3 +159,13 @@ According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/detail
 - SQL Server Standard Ubuntu Pro
 - SQL Server Web Ubuntu Pro
 - SQL Server Developer Ubuntu Pro
+
+**Windows**
+- Windows OS
+- BizTalk Enterprise
+- BizTalk Standard
+- Machine Learning Server
+- Share Point
+- SQL Server Enterprise
+- SQL Server Standard
+- SQL Server Web
