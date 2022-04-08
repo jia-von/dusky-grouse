@@ -109,37 +109,12 @@
     </hop>
     <hop>
       <from>remove_redundant_fields</from>
+      <to>create_series_column</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>create_series_column</from>
       <to>categorize_vm_tierType_series_accelerator_type_versions</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>categorize_vm_tierType_series_accelerator_type_versions</from>
-      <to>categorize_vm_sub_family</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>categorize_vm_sub_family</from>
-      <to>remove_sku_vm_series</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>remove_sku_vm_series</from>
-      <to>vCPU_category</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>vCPU_category</from>
-      <to>remove_vm_sub_series</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>remove_vm_sub_series</from>
-      <to>remove_add_features</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>remove_add_features</from>
-      <to>azure_vm_final_output</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -166,62 +141,6 @@
     <GUI>
       <xloc>256</xloc>
       <yloc>208</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>categorize_vm_sub_family</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>//Script here
-
-if(isNaN(sku_series_removed.charAt(0))){
-	if (sku_series_removed.charAt(0) == sku_series_removed.charAt(0).toUpperCase()){
-	var vm_sub_series = sku_series_removed.slice(0,1);
-	var sku_sub_series_removed = sku_series_removed.slice(1);
-} else {
-	var vm_sub_series = null;
-	var sku_sub_series_removed = sku_series_removed;
-} 
-} else {
-	var vm_sub_series = null;
-	var sku_sub_series_removed = sku_series_removed;
-}</jsScript_script>
-      </jsScript>
-    </jsScripts>
-    <fields>
-      <field>
-        <name>vm_sub_series</name>
-        <rename>vm_sub_series</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>sku_sub_series_removed</name>
-        <rename>sku_sub_series_removed</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>560</xloc>
-      <yloc>288</yloc>
     </GUI>
   </transform>
   <transform>
@@ -282,40 +201,77 @@ if (modified_armSkuName.includes('_v1')) {
 	var sliced_arm_sku = modified_armSkuName;
 }
 
-// Check for accelerator type present or not
+// Check for accelerator type (GPU) present or not
 if (sliced_arm_sku.includes('_')) {
-	var accelerator_type = sliced_arm_sku.slice(sliced_arm_sku.indexOf('_')+1);
+	var GPU = sliced_arm_sku.slice(sliced_arm_sku.indexOf('_')+1);
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.indexOf('_'));
 } else if (sliced_arm_sku.includes('Type1')) {
-	var accelerator_type = 'Type1';
+	var GPU = 'Type1';
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
 } else if (sliced_arm_sku.includes('Type2')) {
-	var accelerator_type = 'Type2';
+	var GPU = 'Type2';
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
 } else if (sliced_arm_sku.includes('Type3')) {
-	var accelerator_type = 'Type3';
+	var GPU = 'Type3';
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
 } else if (sliced_arm_sku.includes('Type4')) {
-	var accelerator_type = 'Type4';
+	var GPU = 'Type4';
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
 } else if (sliced_arm_sku.includes('Type5')) {
-	var accelerator_type = 'Type5';
+	var GPU = 'Type5';
 	var sku_accelerator_removed = sliced_arm_sku.slice(0,sliced_arm_sku.lastIndexOf(' '));
 } else {
-	var accelerator_type = null;
+	var GPU = null;
 	var sku_accelerator_removed = sliced_arm_sku;
 }
 
-// Create column for VM series type
-var vm_series = sku_accelerator_removed.slice(0,1);
-var sku_series_removed = sku_accelerator_removed.slice(1);
+
+// Create column for vCPU and constrained vCPU
+// Check if sku_accelerator_removed contains '-'
+if(sku_accelerator_removed.includes('-')){
+	var constrained_vCPU_with_features = sku_accelerator_removed.slice(sku_accelerator_removed.indexOf('-')+1);
+	var vCPU_with_features = sku_accelerator_removed.slice(0,sku_accelerator_removed.indexOf('-'));
+} else {
+	var constrained_vCPU_with_features = null;
+	var vCPU_with_features = sku_accelerator_removed;
+}
+
+// Create column for vCPU
+	
+
+// Create column for spot or low-priority pricing type
+if(meterName.includes('Spot')){
+	var spot_vs_low_priority_pricing = 'Spot';
+} else if (meterName.includes('Low Priority')) {
+	var spot_vs_low_priority_pricing = 'Low Priority';
+} else {
+	var spot_vs_low_priority_pricing = null;
+}
+
+// Create Column for Operating System
+if(productName.includes('Windows')){
+	var vm_operating_system = 'Windows';
+} else if (productName.includes('Linux')){
+	var vm_operating_system = 'Linux';
+} else {
+	var vm_operating_system = null;
+}
+
 </jsScript_script>
       </jsScript>
     </jsScripts>
     <fields>
       <field>
-        <name>sku_series_removed</name>
-        <rename>sku_series_removed</rename>
+        <name>vm_operating_system</name>
+        <rename>vm_operating_system</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>spot_vs_low_priority_pricing</name>
+        <rename>spot_vs_low_priority_pricing</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
@@ -330,16 +286,24 @@ var sku_series_removed = sku_accelerator_removed.slice(1);
         <replace>N</replace>
       </field>
       <field>
-        <name>vm_series</name>
-        <rename>vm_series</rename>
+        <name>vCPU_with_features</name>
+        <rename>vCPU_with_features</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
         <replace>N</replace>
       </field>
       <field>
-        <name>accelerator_type</name>
-        <rename>accelerator_type</rename>
+        <name>constrained_vCPU_with_features</name>
+        <rename>constrained_vCPU_with_features</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>GPU</name>
+        <rename>GPU</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
@@ -758,37 +722,6 @@ API pagination.</description>
     </GUI>
   </transform>
   <transform>
-    <name>remove_add_features</name>
-    <type>ReplaceString</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <in_stream_name>constrained_vCPUs</in_stream_name>
-        <out_stream_name/>
-        <use_regex>yes</use_regex>
-        <replace_string>[a-z]</replace_string>
-        <replace_by_string/>
-        <set_empty_string>N</set_empty_string>
-        <replace_field_by_string/>
-        <whole_word>no</whole_word>
-        <case_sensitive>no</case_sensitive>
-        <is_unicode>no</is_unicode>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>816</xloc>
-      <yloc>416</yloc>
-    </GUI>
-  </transform>
-  <transform>
     <name>remove_redundant_fields</name>
     <type>SelectValues</type>
     <description/>
@@ -821,130 +754,6 @@ API pagination.</description>
     </GUI>
   </transform>
   <transform>
-    <name>remove_sku_vm_series</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <select_unspecified>N</select_unspecified>
-      <remove>
-        <name>sku_series_removed</name>
-      </remove>
-      <remove>
-        <name>tierMinimumUnits</name>
-      </remove>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>560</xloc>
-      <yloc>176</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>remove_vm_sub_series</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <fields>
-      <field>
-        <name>retailPrice</name>
-      </field>
-      <field>
-        <name>unitPrice</name>
-      </field>
-      <field>
-        <name>armRegionName</name>
-      </field>
-      <field>
-        <name>location</name>
-      </field>
-      <field>
-        <name>effectiveStartDate</name>
-      </field>
-      <field>
-        <name>meterId</name>
-      </field>
-      <field>
-        <name>meterName</name>
-      </field>
-      <field>
-        <name>productId</name>
-      </field>
-      <field>
-        <name>skuId</name>
-      </field>
-      <field>
-        <name>productName</name>
-      </field>
-      <field>
-        <name>serviceId</name>
-      </field>
-      <field>
-        <name>unitOfMeasure</name>
-      </field>
-      <field>
-        <name>type</name>
-      </field>
-      <field>
-        <name>isPrimaryMeterRegion</name>
-      </field>
-      <field>
-        <name>armSkuName</name>
-      </field>
-      <field>
-        <name>tier_type</name>
-      </field>
-      <field>
-        <name>vm_series</name>
-      </field>
-      <field>
-        <name>vm_sub_series</name>
-      </field>
-      <field>
-        <name>sku_sub_series_removed</name>
-      </field>
-      <field>
-        <name>vCPU</name>
-      </field>
-      <field>
-        <name>constrained_vCPUs</name>
-      </field>
-      <field>
-        <name>add_features</name>
-      </field>
-      <field>
-        <name>accelerator_type</name>
-      </field>
-      <field>
-        <name>vm_version</name>
-      </field>
-      <select_unspecified>N</select_unspecified>
-      <remove>
-        <name>sku_sub_series_removed</name>
-      </remove>
-      <remove>
-        <name>add_features</name>
-      </remove>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>816</xloc>
-      <yloc>288</yloc>
-    </GUI>
-  </transform>
-  <transform>
     <name>select_values</name>
     <type>SelectValues</type>
     <description/>
@@ -971,8 +780,8 @@ API pagination.</description>
     </GUI>
   </transform>
   <transform>
-    <name>vCPU_category</name>
-    <type>ScriptValueMod</type>
+    <name>create_series_column</name>
+    <type>ReplaceString</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -981,371 +790,24 @@ API pagination.</description>
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>// Check to see the row has constrained CPU with the presence of '-'
-
-if(sku_sub_series_removed.includes('-')){
-	var constrained_vCPUs = sku_sub_series_removed.slice(sku_sub_series_removed.indexOf('-')+1);
-	var vCPU_add_features = sku_sub_series_removed.slice(0,sku_sub_series_removed.indexOf('-'));
-} else {
-	var constrained_vCPUs = null;
-	var vCPU_add_features = sku_sub_series_removed;
-}
-
-// Isolate vCPU numbers only
-var vCPU = vCPU_add_features.replace(/[a-z]/g,'');
-
-// Isolate additive features only
-var add_features = vCPU_add_features.replace(/[0-9]/g,'')</jsScript_script>
-      </jsScript>
-    </jsScripts>
     <fields>
       <field>
-        <name>vCPU</name>
-        <rename>vCPU</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>add_features</name>
-        <rename>add_features</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
-      </field>
-      <field>
-        <name>constrained_vCPUs</name>
-        <rename>constrained_vCPUs</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-        <replace>N</replace>
+        <in_stream_name>productName</in_stream_name>
+        <out_stream_name>vm_series_name</out_stream_name>
+        <use_regex>yes</use_regex>
+        <replace_string>(Virtual Machines )|(Windows)|(Linux)|</replace_string>
+        <replace_by_string/>
+        <set_empty_string>N</set_empty_string>
+        <replace_field_by_string/>
+        <whole_word>no</whole_word>
+        <case_sensitive>no</case_sensitive>
+        <is_unicode>no</is_unicode>
       </field>
     </fields>
     <attributes/>
     <GUI>
-      <xloc>816</xloc>
-      <yloc>176</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>azure_vm_final_output</name>
-    <type>TextFileOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <separator>,</separator>
-    <enclosure/>
-    <enclosure_forced>N</enclosure_forced>
-    <enclosure_fix_disabled>N</enclosure_fix_disabled>
-    <header>Y</header>
-    <footer>N</footer>
-    <format>DOS</format>
-    <compression>None</compression>
-    <encoding>windows-1252</encoding>
-    <endedLine/>
-    <fileNameInField>N</fileNameInField>
-    <fileNameField/>
-    <create_parent_folder>Y</create_parent_folder>
-    <file>
-      <name>${PROJECT_HOME}/azure_csv_file_output.txt</name>
-      <servlet_output>N</servlet_output>
-      <do_not_open_new_file_init>N</do_not_open_new_file_init>
-      <extention>csv</extention>
-      <append>N</append>
-      <split>N</split>
-      <haspartno>N</haspartno>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <SpecifyFormat>N</SpecifyFormat>
-      <date_time_format/>
-      <add_to_result_filenames>Y</add_to_result_filenames>
-      <pad>N</pad>
-      <fast_dump>N</fast_dump>
-      <splitevery/>
-    </file>
-    <fields>
-      <field>
-        <name>retailPrice</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>unitPrice</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>armRegionName</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>location</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>effectiveStartDate</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>meterId</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>meterName</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>productId</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>skuId</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>productName</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>serviceId</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>unitOfMeasure</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>type</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>isPrimaryMeterRegion</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>armSkuName</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>tier_type</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>vm_series</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>vm_sub_series</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>vCPU</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>constrained_vCPUs</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>accelerator_type</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>vm_version</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-    </fields>
-    <attributes/>
-    <GUI>
-      <xloc>1136</xloc>
-      <yloc>176</yloc>
+      <xloc>560</xloc>
+      <yloc>480</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
