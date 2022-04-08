@@ -186,3 +186,5 @@ Other inputs considered in VM pricing options:
 - Display pricing by: _month_ or _hour_
 - [x] [Spot](https://azure.microsoft.com/en-ca/services/virtual-machines/spot/)
 - [x] [Low-priority](https://azure.microsoft.com/en-ca/blog/low-priority-scale-sets/)
+- [x] vCPUs
+- [x] Constrained vCPUs
