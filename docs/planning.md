@@ -184,3 +184,5 @@ Other inputs considered in VM pricing options:
 - Region
 - Currency
 - Display pricing by
+- [Spot](https://azure.microsoft.com/en-ca/services/virtual-machines/spot/)
+- [Low-priority](https://azure.microsoft.com/en-ca/blog/low-priority-scale-sets/)
