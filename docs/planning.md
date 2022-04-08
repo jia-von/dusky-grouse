@@ -180,9 +180,9 @@ According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/detail
 
 ### Others
 Other inputs considered in VM pricing options:
-- VM Series
-- Region
-- Currency
-- Display pricing by
-- [Spot](https://azure.microsoft.com/en-ca/services/virtual-machines/spot/)
-- [Low-priority](https://azure.microsoft.com/en-ca/blog/low-priority-scale-sets/)
+- [x] VM Series
+- [x] Region
+- [x] Currency
+- Display pricing by: _month_ or _hour_
+- [x] [Spot](https://azure.microsoft.com/en-ca/services/virtual-machines/spot/)
+- [x] [Low-priority](https://azure.microsoft.com/en-ca/blog/low-priority-scale-sets/)
