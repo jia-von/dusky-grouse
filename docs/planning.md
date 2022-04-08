@@ -171,19 +171,19 @@ According to [Azure VM Pricing](https://azure.microsoft.com/en-us/pricing/detail
 - SQL Server Web
 
 ### Category
-- General purpose
-- Compute optimized
-- Memory optimized
-- Storage optimized
-- GPU
-- High performance compute
+- [ ] General purpose
+- [ ] Compute optimized
+- [ ] Memory optimized
+- [ ] Storage optimized
+- [ ] GPU
+- [ ] High performance compute
 
 ### Others
 Other inputs considered in VM pricing options:
 - [x] VM Series
 - [x] Region
 - [x] Currency
-- Display pricing by: _month_ or _hour_
+- [ ] Display pricing by: _month_ or _hour_
 - [x] [Spot](https://azure.microsoft.com/en-ca/services/virtual-machines/spot/)
 - [x] [Low-priority](https://azure.microsoft.com/en-ca/blog/low-priority-scale-sets/)
 - [x] vCPUs
